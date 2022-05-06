@@ -1,0 +1,180 @@
+body {
+	max-width: 1440px;
+	box-sizing: border-box;
+	font-family: "lato", "sans-serif", "Georgia";
+}
+
+#block_page {
+	width: 86%;
+	margin: auto;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	margin-top: 40px;
+}
+
+#logo-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	align-self: center;
+	margin-bottom: 17px;
+}
+
+#general-search-container {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+h1 {
+	margin: 0;
+	font-size: 2.3em;
+	color: #d04f4f;
+}
+
+#general-search {
+	border: none;
+	background: #e7e7e7;
+	border-radius: 5px;
+	width: calc(100% - 24px);
+	height: 70px;
+	font-weight: 400;
+	font-size: 18px;
+	line-height: 22px;
+	padding: 0 0 0 24px;
+}
+
+#icon-search {
+	position: absolute;
+	top: 20px;
+	right: 24px;
+}
+
+#specific-search-container {
+	display: flex;
+	--padding-left-input: 15px;
+	gap: calc(var(--padding-left-input) + 20px);
+	margin-bottom: 25px;
+}
+
+.measure-specific-search-container {
+	max-width: 170px;
+	height: 69px;
+	position: relative;
+}
+
+.measure-specific-search-container input {
+	color: white;
+	font-weight: 700;
+	font-size: 1em;
+	padding: 0 15px;
+	border-radius: 5px;
+	height: 100%;
+	line-height: 22px;
+	border: none;
+	width: calc(100% - 15px);
+	font-family: inherit;
+	position: relative;
+}
+
+.measure-specific-search-container::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 25px;
+	width: 0.6em;
+	height: 0.6em;
+	border-left: 0.2rem solid rgb(255, 255, 255);
+	border-bottom: 0.2rem solid rgb(255, 255, 255);
+	transform: rotate(315deg);
+}
+
+#ingredient-search {
+	background: #3282f7;
+}
+
+#appliance-search {
+	background: #68d9a4;
+}
+
+#ustensils-search {
+	background: #ed6454;
+}
+
+#recipe-card-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	row-gap: 50px;
+}
+
+article {
+	width: 380px;
+	height: 364px;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: column;
+}
+
+#image {
+	background-color: #c7bebe;
+	height: 50%;
+	width: 100%;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+#card-title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+#card-content {
+	padding: 20px;
+	background-color: #e7e7e7;
+	font-size: 12px;
+	height: calc(50% - 20px);
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+#label-ingredient {
+	font-weight: 700;
+}
+
+h2,
+#time {
+	margin: 0;
+}
+
+#time {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+#card-body {
+	display: flex;
+}
+
+#ingredients {
+	width: 50%;
+	line-height: 15px;
+}
+
+#description {
+	width: 50%;
+	max-height: 110px;
+	-webkit-line-clamp: 7;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+
+#card-content p {
+	margin: 0;
+}
