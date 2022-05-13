@@ -23,7 +23,8 @@ class CardRecipe {
             const ingredientTemplate = `<p><strong>${ingredient.quantity ? ingredient.ingredient + ':' : ingredient.ingredient}</strong> ${ingredient.quantity ? ingredient.quantity
                 : ""}${ingredient.unit ? ingredient.unit : ""}</p>`
             this.listOfIngredients.push(ingredientTemplate)
-        });
+        })
+
         return this.listOfIngredients.join('')
     }
 

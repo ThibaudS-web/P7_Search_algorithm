@@ -97,28 +97,15 @@ h1 {
 	transform: rotate(315deg);
 }
 
-#ingredient-search {
-	background: #3282f7;
-}
-
-#ingredient-search::placeholder {
+input::placeholder {
 	color: white;
 	opacity: 0.5;
-}
-
-#appliance-search {
-	background: #68d9a4;
-}
-
-#ustensils-search {
-	background: #ed6454;
 }
 
 #recipe-card-container {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-between;
-	row-gap: 50px;
+	gap: 40px 40px;
 }
 
 article {
@@ -203,17 +190,15 @@ h2,
 }
 
 ul {
+	display: none;
 	margin: 0;
-	background: #3282f7;
-	line-height: 2em;
+	line-height: 3em;
 	list-style: none;
 	color: white;
 	width: calc(100% - 15px);
-	max-height: 170px;
 	padding: 0 15px 15px 15px;
-	column-gap: 8em;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
+	column-gap: 2em;
+	column-count: 3;
 }
 
 .arrow-up::after {
