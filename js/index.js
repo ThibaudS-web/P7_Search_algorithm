@@ -150,16 +150,3 @@ function updateRecipes(search) {
 
     displayRecipes(filteredRecipes)
 }
-
-
-
-
-
-// - Tu créés les Tag, tu les stockes  : checked
-// - Tu créés les Filters, tu les stockes  : checked
-// - Tu créés les Wrappers des Tags  : checked
-// - Tu créés les Wrapper des Filtres  : checked
-// - Tu appelles les fonctions des Wrappers des Filters pour créer l'UI des Filters
-// - Tu appelles les fonctions des Wrappers des Tags pour ajouter l'UI des Tags
-// - Un Wrapper de Tag doit exposer deux événements: click pour sélectionner, click pour désélectionner
-// - Tu map les événements, tu gères les conséquences et voilà
