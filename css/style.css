@@ -3,6 +3,7 @@ body {
 	box-sizing: border-box;
 	font-family: "lato", "sans-serif", "Georgia";
 	margin: auto;
+	padding-bottom: 40px;
 }
 
 #block_page {
@@ -55,13 +56,13 @@ h1 {
 
 #specific-search-container {
 	display: flex;
-	--padding-left-input: 15px;
-	gap: calc(var(--padding-left-input) + 20px);
+	gap: calc(15px + 20px);
+	max-width: calc(100% - 15px);
 	margin-bottom: 25px;
 }
 
 .measure-specific-search-container {
-	width: 170px;
+	width: auto;
 	height: 69px;
 	position: relative;
 }
@@ -114,6 +115,7 @@ article {
 	border-radius: 5px;
 	display: flex;
 	flex-direction: column;
+	box-shadow: 5px 8px 4px -2px rgba(0, 0, 0, 0.35);
 }
 
 h2 {
@@ -189,6 +191,12 @@ h2,
 	margin: 0;
 }
 
+#specific-search-container ul li:hover {
+	border-radius: 5px;
+	cursor: pointer;
+	box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.1);
+}
+
 ul {
 	display: none;
 	margin: 0;
@@ -204,4 +212,32 @@ ul {
 .arrow-up::after {
 	transform: rotate(135deg);
 	top: 28px;
+}
+
+#tag-container {
+	margin-bottom: 15px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.tags {
+	padding: 0 10px;
+	height: 37px;
+	color: white;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	column-gap: 13px;
+	box-shadow: 5px 8px 4px -2px rgba(0, 0, 0, 0.35);
+}
+
+#unselect-icon {
+	cursor: pointer;
+}
+
+.tag-selected {
+	text-decoration: line-through;
+	text-decoration-thickness: 2px;
 }

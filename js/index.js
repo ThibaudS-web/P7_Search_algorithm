@@ -1,51 +1,123 @@
-import { dataBaseClient } from "./database/databaseClient.js"
-import CardRecipe from "./templates/CardRecipe.js"
-import Filter from "./components/Filter.js"
+import {
+    dataBaseClient
+} from "./database/databaseClient.js"
+import CardRecipe from "./UI/CardRecipe.js"
+import Tag from './models/Tag.js'
 import textFormattingInFilter from "./utils/data-formatting.js"
 import clearDOMContainer from "./utils/clear-DOM-container.js"
+import Filter from "./models/Filter.js"
+import FilterViewDataWrapper from './UI/FilterViewDataWrapper.js'
+import TagViewDataWrapper from "./UI/TagViewDataWrapper.js"
 
 //All recipes from json file
-const recipes = [...new Set(dataBaseClient.getRecipes())]
+const recipes = dataBaseClient.getRecipes()
 
-let ingredientsList
-let appliancesList
-let ustensilsList
+
+let ingredientsNames
+let appliancesNames
+let ustensilsNames
 
 //Contains the recipes
 const recipesContainer = document.querySelector('#recipe-card-container')
 //Contains the filters
 const filtersContainer = document.querySelector('#specific-search-container')
+//Contains the tags
+const tagsContainer = document.querySelector('#tag-container')
+//Contains the selected tags
+const selectedTags = new Map()
 
 function init() {
-    displayRecipes(recipes)
-    setFiltersValues(recipes)
-    displayFilters(ingredientsList, appliancesList, ustensilsList)
+    updateRecipes(null)
 }
 
 init()
 
-//Setlist of ingredients, appiances and ustensils
-function setFiltersValues(recipe) {
-    ingredientsList = [...new Set(recipe.flatMap(recipe => recipe.ingredients)
-        .map(ingredient => textFormattingInFilter(ingredient.ingredient)))]
-
-    appliancesList = [...new Set(recipe.map(recipe => textFormattingInFilter(recipe.appliance)))]
-
-    ustensilsList = [...new Set(recipe.flatMap(recipe => recipe.ustensils)
-        .map(ustensil => textFormattingInFilter(ustensil)))]
-}
-
 function displayRecipes(recipes) {
+    clearDOMContainer(recipesContainer)
     recipes.forEach(recipe => {
         const cardRecipe = new CardRecipe(recipe)
         recipesContainer.appendChild(cardRecipe.getHTML())
     })
+
+    displayFilters(recipes)
 }
 
-function displayFilters(indredients, appiances, ustensiles) {
-    filtersContainer.appendChild(new Filter('ingredient', 'Ingredients', indredients, '#3282f7').getHTML())
-    filtersContainer.appendChild(new Filter('appliance', 'Appareils', appiances, '#68d9a4').getHTML())
-    filtersContainer.appendChild(new Filter('ustensils', 'Ustensiles', ustensiles, '#ed6454').getHTML())
+function displayFilters(recipes) {
+    clearDOMContainer(filtersContainer)
+
+    ingredientsNames = [...new Set(recipes.flatMap(recipe => recipe.ingredients)
+        .map(ingredient => textFormattingInFilter(ingredient.ingredient)))]
+
+    appliancesNames = [...new Set(recipes.map(recipe => textFormattingInFilter(recipe.appliance)))]
+
+    ustensilsNames = [...new Set(recipes.flatMap(recipe => recipe.ustensils)
+        .map(ustensil => textFormattingInFilter(ustensil)))]
+
+    let tagId = 0
+
+    let ingredientsTags = ingredientsNames.map(item => {
+        tagId++
+        return new Tag(tagId, item, 'ingredient')
+    })
+
+    let appliancesTags = appliancesNames.map(item => {
+        tagId++
+        return new Tag(tagId, item, 'appliance')
+    })
+
+    let ustensilsTags = ustensilsNames.map(item => {
+        tagId++
+        return new Tag(tagId, item, 'ustensils')
+    })
+
+    let filterIngredients = new Filter('Ingrédients', 'ingredient', ingredientsTags)
+
+    let filterAppliances = new Filter('Appareils', 'appliance', appliancesTags)
+
+    let filterUstensils = new Filter('Ustensiles', 'ustensils', ustensilsTags)
+
+    let ingredientsFilterWrapper = new FilterViewDataWrapper(filterIngredients)
+    ingredientsFilterWrapper.setOnTagSelectedListener((wrapper) => {
+        // Select ingredient tag
+        addNewTag(wrapper)
+    })
+    ingredientsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
+        // Unselect ingredient tag
+        removeTag(wrapper.getId())
+    })
+    let appliancesFilterWrapper = new FilterViewDataWrapper(filterAppliances)
+    appliancesFilterWrapper.setOnTagSelectedListener((wrapper) => {
+        // Select appliance tag
+        addNewTag(wrapper)
+    })
+    appliancesFilterWrapper.setOnTagUnselectedListener((wrapper) => {
+        // Unselect appliance tag
+        removeTag(wrapper.getId())
+    })
+    let ustensilsFilterWrapper = new FilterViewDataWrapper(filterUstensils)
+    ustensilsFilterWrapper.setOnTagSelectedListener((wrapper) => {
+        // Select ustensil tag
+        addNewTag(wrapper)
+    })
+    ustensilsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
+        // Unselect ustensil tag
+        removeTag(wrapper.getId())
+    })
+
+    filtersContainer.appendChild(ingredientsFilterWrapper.getHTML())
+    filtersContainer.appendChild(appliancesFilterWrapper.getHTML())
+    filtersContainer.appendChild(ustensilsFilterWrapper.getHTML())
+}
+
+function addNewTag(tagWrapper) {
+    let tagUI = tagWrapper.getSelectedHTML()
+    tagsContainer.appendChild(tagUI)
+    selectedTags.set(tagWrapper.getId(), tagUI)
+}
+
+function removeTag(id) {
+    let tagUI = selectedTags.get(id)
+    tagsContainer.removeChild(tagUI)
 }
 
 const searchInput = document.querySelector('#general-search')
@@ -59,31 +131,35 @@ searchInput.addEventListener('input', () => {
         filteredList = true
     } else if (filteredList) {
         filteredList = false
-        clearDOMContainer(recipesContainer)
-        displayRecipes(recipes)
-        updateFilters(recipes)
+        updateRecipes(null)
     }
 })
 
 function updateRecipes(search) {
+    let filteredRecipes
+    if (search == null) {
+        filteredRecipes = recipes
+    } else {
+        filteredRecipes = recipes.filter(recipe => {
 
-    clearDOMContainer(recipesContainer)
+            let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
 
-    let filteredRecipes = recipes.filter(recipe => {
-
-        let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
-
-        return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(search))
-    })
+            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(search))
+        })
+    }
 
     displayRecipes(filteredRecipes)
-    updateFilters(filteredRecipes)
 }
 
-function updateFilters(dataFromfilteredRecipes) {
 
-    clearDOMContainer(filtersContainer)
-    setFiltersValues(dataFromfilteredRecipes)
-    displayFilters(ingredientsList, appliancesList, ustensilsList)
-}
 
+
+
+// - Tu créés les Tag, tu les stockes  : checked
+// - Tu créés les Filters, tu les stockes  : checked
+// - Tu créés les Wrappers des Tags  : checked
+// - Tu créés les Wrapper des Filtres  : checked
+// - Tu appelles les fonctions des Wrappers des Filters pour créer l'UI des Filters
+// - Tu appelles les fonctions des Wrappers des Tags pour ajouter l'UI des Tags
+// - Un Wrapper de Tag doit exposer deux événements: click pour sélectionner, click pour désélectionner
+// - Tu map les événements, tu gères les conséquences et voilà

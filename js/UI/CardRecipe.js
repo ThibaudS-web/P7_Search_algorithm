@@ -5,23 +5,29 @@ class CardRecipe {
         this.listOfIngredients = []
     }
 
+// let ingredientsElements = this.#ingredientsWrappers.map((wrapper) => { return wrapper.getHTML() })
     insertIngredients() {
         this.recipe.ingredients.forEach(ingredient => {
+            let ingredientUnit
 
             switch (ingredient.unit) {
                 case 'grammes':
-                    ingredient.unit = 'g'
+                    ingredientUnit = 'g'
                     break
                 case 'cuillères à soupe':
-                    ingredient.unit = 'c.à.s'
+                    ingredientUnit = 'c.à.s'
                     break
                 case 'cuillères à café':
-                    ingredient.unit = 'c.à.c'
+                    ingredientUnit = 'c.à.c'
                     break
+                case 'cl': 
+                    ingredientUnit = 'cl'
+                case 'ml':
+                    ingredientUnit = 'ml'
             }
 
             const ingredientTemplate = `<p><strong>${ingredient.quantity ? ingredient.ingredient + ':' : ingredient.ingredient}</strong> ${ingredient.quantity ? ingredient.quantity
-                : ""}${ingredient.unit ? ingredient.unit : ""}</p>`
+                : ""}${ingredientUnit ? ingredientUnit : ""}</p>`
             this.listOfIngredients.push(ingredientTemplate)
         })
 
