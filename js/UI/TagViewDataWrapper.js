@@ -5,7 +5,7 @@ class TagViewDataWrapper {
     #selectedTagUI
     #selected
     #onTagSelected = (id) => {
-        console.log("onTagSelected not defined!")
+        console.log("onTagUnselected not defined!")
     }
     #onTagUnselected = (id) => {
         console.log("onTagUnselected not defined!")
@@ -16,16 +16,23 @@ class TagViewDataWrapper {
         this.#unselectedTagUI = document.createElement('li')
         this.#selectedTagUI = document.createElement('div')
         this.#selected = false
+
+        this.buildUnselectedUI()
+        this.buildSelectedUI()
     }
 
-    setOnTagSelectedListener(onTagSelected) {
-        this.#onTagSelected = onTagSelected
-    }
-    setOnTagUnselectedListener(onTagUnselected) {
-        this.#onTagUnselected = onTagUnselected
+    buildUnselectedUI() {
+        this.#unselectedTagUI.innerHTML = `${this.#tag.name}`
+        this.#unselectedTagUI.addEventListener('click', (event) => {
+            if (!this.#selected) {
+                this.selectTag()
+            } else {
+                this.unselectTag()
+            }
+        })
     }
 
-    getSelectedHTML() {
+    buildSelectedUI() {
         const tagTemplate = `
 			<p>${this.getName()}</p>
 			<svg id="unselect-icon"
@@ -52,20 +59,20 @@ class TagViewDataWrapper {
                 this.unselectTag()
             }
         })
+    }
 
+    setOnTagSelectedListener(onTagSelected) {
+        this.#onTagSelected = onTagSelected
+    }
+    setOnTagUnselectedListener(onTagUnselected) {
+        this.#onTagUnselected = onTagUnselected
+    }
+
+    getSelectedHTML() {
         return this.#selectedTagUI
-
     }
 
     getUnselectedHTML() {
-        this.#unselectedTagUI.innerHTML = `${this.#tag.name}`
-        this.#unselectedTagUI.addEventListener('click', (event) => {
-            if (!this.#selected) {
-                this.selectTag()
-            } else {
-                this.unselectTag()
-            }
-        })
         return this.#unselectedTagUI
     }
 

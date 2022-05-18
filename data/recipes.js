@@ -67,8 +67,8 @@ const recipes = [
         ],
         "time": 60,
         "description": "Découper le thon en dés, mettre dans un plat et recouvrir de jus de citron vert (mieux vaut prendre un plat large et peu profond). Laisser reposer au réfrigérateur au moins 2 heures. (Si possible faites-le le soir pour le lendemain. Après avoir laissé mariner le poisson, coupez le concombre en fines rondelles sans la peau et les tomates en prenant soin de retirer les pépins. Rayer la carotte. Ajouter les légumes au poissons avec le citron cette fois ci dans un Saladier. Ajouter le lait de coco. Pour ajouter un peu plus de saveur vous pouver ajouter 1 à 2 cuillères à soupe de Crème de coco",
-        "appliance": "Saladier",
-        "ustensils": ["presse citron"]
+        "appliance": "",
+        "ustensils": ["presse citron", "Saladier"]
     }, {
         "id": 3,
         "name": "Poulet coco réunionnais",
@@ -324,7 +324,7 @@ const recipes = [
         ],
         "time": 15,
         "description": "Peler le concombre le couper 2, retirer les pépins. Couper les olives en morceaux, ainsi que le fromage de chèvre. Ajouter le basilic ainsi que le vinaigre balsamic et l'huile d'olives à votre gout.",
-        "appliance": "Saladier",
+        "appliance": "",
         "ustensils": ["cuillère en bois", "couteau"]
     },
     {
@@ -397,8 +397,8 @@ const recipes = [
         ],
         "time": 10,
         "description": "Commencer par couper les feuilles de salade, ajouter les tomates cerises et le fromage découpé en cubes ou en boules avec la cuillère à melon. Découper le jambon de parme en fines lamelles. Ajouter la pomme elle aussi découpée en petit morceaux. Assaisonnez à votre gout. ",
-        "appliance": "Saladier",
-        "ustensils": ["couteau", "cuillère à melon"]
+        "appliance": "",
+        "ustensils": ["couteau", "cuillère à melon", "Saladier"]
     }, {
         "id": 12,
         "name": "Compote pomme rhubarbe",
@@ -426,8 +426,8 @@ const recipes = [
         ],
         "time": 40,
         "description": "Éplucher les fruits et les couper en morceaux, les mettre dans une casserole en ajoutant l'eau et le sucre vanillé. Laisser cuire 15 minutes en remuant régulièrement.",
-        "appliance": "Casserole",
-        "ustensils": ["couteau", "économe"]
+        "appliance": "",
+        "ustensils": ["couteau", "économe", "Casserole"]
     },
     {
         "id": 13,
@@ -462,8 +462,8 @@ const recipes = [
         ],
         "time": 40,
         "description": "Cuire les pommes de terre environ 30 minutes. Découper les échalottes finement. Durant la cuisson des pommes de terre. Préparez la vinaigrette avec l'huile d'olive et le vinaigre de cidre. Salez poivrez à discrétion. Dans un saladier, mettre le mâche. Ajouter",
-        "appliance": "Casserole",
-        "ustensils": ["couteau", "saladier", "cuillère en bois"]
+        "appliance": "",
+        "ustensils": ["couteau", "saladier", "cuillère en bois", "Casserole"]
     },
     {
         "id": 14,
@@ -743,8 +743,8 @@ const recipes = [
         ],
         "time": 30,
         "description": "Cuisiner la viande hachée dans une poelle à frire. Dans une autre faire cuire les oignons découpés en fins dés avec un peu de beurre. Ajouter du vin rouge. Mélanger les oigons avec la viande hachée. Faire cuire les pates le temps indiqué sur le paquet. Ajouter le coulis de tomates à la viande hachée. Une fois que les pates sont cuites, ajouter la crème fraiche à la viande hachée. Serivir.",
-        "appliance": "casserole",
-        "ustensils": ["Cuillère en bois", "louche", "couteau"]
+        "appliance": "",
+        "ustensils": ["Cuillère en bois", "louche", "couteau", "casserole"]
     },
     {
         "id": 22,
@@ -857,8 +857,8 @@ const recipes = [
         ],
         "time": 40,
         "description": "Découper le concombre et les tomates en dés, les mettre dans un saladier avec le mais et les miettes de poisson, ajouter les pates. Ajouter la mayonnaise. Mélanger le tout et servir frais.",
-        "appliance": "Saladier",
-        "ustensils": ["couteau", "cuillère en bois"]
+        "appliance": "",
+        "ustensils": ["couteau", "cuillère en bois", "Saladier"]
     },
     {
         "id": 25,
@@ -957,8 +957,8 @@ const recipes = [
         ],
         "time": 15,
         "description": "Faire fondre l'oseille avec du beurre demi sel, ajouter un litre d'eau. Ajouter les vermicelles. Laisser cuire. une foit prêt, sortir du feu et après 5 minutes ajouter le jaune d'oeuf et la crême fraîche",
-        "appliance": "casserole",
-        "ustensils": ["couteau", "cuillère en bois"]
+        "appliance": "",
+        "ustensils": ["couteau", "cuillère en bois", "casserole"]
     },
     {
         "id": 28,
@@ -1394,8 +1394,8 @@ const recipes = [
         ],
         "time": 10,
         "description": "Dans un saladier mettre l'eau, le jus des cirtons et le sucre. Bien mélanger. Ajouter le bicarbonate. Servir. Ajouter des glaçon et une feuille de menthe pour la déco.",
-        "appliance": "Saladier",
-        "ustensils": ["cuillère en bois"]
+        "appliance": "",
+        "ustensils": ["cuillère en bois", "Saladier"]
     },
     {
         "id": 41,
@@ -1419,8 +1419,8 @@ const recipes = [
         ],
         "time": 20,
         "description": "Séparer les blancs d'oeufs. Faire fondre le chocolat au bain marie. Ajouter les jaunes et le sucre au chocolat hors du feu. Battre les blancs en neige. Ajouter les blancs au mélange de chocolat. Mélangez délicatement avec une spatule. Servir dans un plat ou dans des verres. Mettre au frais",
-        "appliance": "casserole",
-        "ustensils": ["fouet", "spatule", "verres"]
+        "appliance": "",
+        "ustensils": ["fouet", "spatule", "verres", "casserole"]
     },
     {
         "id": 42,
@@ -1517,8 +1517,8 @@ const recipes = [
         ],
         "time": 15,
         "description": "Mélanger la farine et le beurre fondu en ajoutant le lait peu à peu. Ajouter du sucre après la cuisson. Bien mélanger. Ajouter le chocolat en morceaux et laisser chauffer 8 minutes en mélangeant avec une cuillère en bois. Mettre dans des verres",
-        "appliance": "casserole",
-        "ustensils": ["cuillère en bois"]
+        "appliance": "",
+        "ustensils": ["cuillère en bois", "casserole"]
     },
     {
         "id": 45,
@@ -1547,8 +1547,8 @@ const recipes = [
         ],
         "time": 30,
         "description": "Faire bouillir le lait ( on peut y ajouter de l'essence de vanille. Battre les oeufs et le sucre, ajouter la farine puis finalement ajouter le lait chaud. Remettre à feu doux pour faire épaissir en remuant pendant 5 à 10 minutes.",
-        "appliance": "casserole",
-        "ustensils": ["fouet", "saladier"]
+        "appliance": "",
+        "ustensils": ["fouet", "saladier", "casserole"]
     },
     {
         "id": 46,
@@ -1618,8 +1618,8 @@ const recipes = [
         ],
         "time": 5,
         "description": "Mélanger le jus de citron avec le sucre et la mascarpone. Ajouter la crème fraiche. Mélanger le tout et mettre au congélateur pendant 1 heure. Servir",
-        "appliance": "Saladier",
-        "ustensils": ["fouet", "verres", "cuillère en bois"]
+        "appliance": "",
+        "ustensils": ["fouet", "verres", "cuillère en bois", "Saladier"]
     },
     {
         "id": 48,
@@ -1688,7 +1688,7 @@ const recipes = [
         "description": "Découper les fruits. Le passer au blender jusqu'à obtenir une texture liquide. Mettre au frais. Servir",
         "appliance": "Blender",
         "ustensils": ["couteau", "verres"]
-    }, 
+    },
     {
         "id": 50,
         "name": "Frangipane",

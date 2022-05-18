@@ -46,13 +46,23 @@ function displayRecipes(recipes) {
 function displayFilters(recipes) {
     clearDOMContainer(filtersContainer)
 
-    ingredientsNames = [...new Set(recipes.flatMap(recipe => recipe.ingredients)
-        .map(ingredient => textFormattingInFilter(ingredient.ingredient)))]
+    ingredientsNames = [...
+        new Set(recipes.flatMap(recipe => recipe.ingredients)
+            .filter((ingredient) => ingredient.ingredient.length > 0)
+            .map(ingredient => textFormattingInFilter(ingredient.ingredient)))
+    ]
 
-    appliancesNames = [...new Set(recipes.map(recipe => textFormattingInFilter(recipe.appliance)))]
+    appliancesNames = [...
+        new Set(recipes
+            .filter((recipe) => recipe.appliance.length > 0)
+            .map(recipe => textFormattingInFilter(recipe.appliance)))
+    ]
 
-    ustensilsNames = [...new Set(recipes.flatMap(recipe => recipe.ustensils)
-        .map(ustensil => textFormattingInFilter(ustensil)))]
+    ustensilsNames = [...
+        new Set(recipes.flatMap(recipe => recipe.ustensils)
+            .filter((ustensil) => ustensil.length > 0)
+            .map(ustensil => textFormattingInFilter(ustensil)))
+    ]
 
     let tagId = 0
 
@@ -85,7 +95,6 @@ function displayFilters(recipes) {
     ingredientsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
         // Unselect ingredient tag
         removeTag(wrapper.getId())
-        console.log(wrapper.getId())
     })
     let appliancesFilterWrapper = new FilterViewDataWrapper(filterAppliances)
     appliancesFilterWrapper.setOnTagSelectedListener((wrapper) => {
@@ -120,24 +129,7 @@ function addNewTag(tagWrapper) {
 function removeTag(id) {
     let tagUI = selectedTags.get(id)
     tagsContainer.removeChild(tagUI)
-    console.log(selectedTags.get(id))
 }
-
-
-const searchInput = document.querySelector('#general-search')
-
-let filteredList = false
-
-searchInput.addEventListener('input', () => {
-
-    if (searchInput.value.length >= 3) {
-        updateRecipes(searchInput.value.toLowerCase())
-        filteredList = true
-    } else if (filteredList) {
-        filteredList = false
-        updateRecipes(null)
-    }
-})
 
 //faire new branch boucles natives
 function updateRecipes(search) {
@@ -155,4 +147,17 @@ function updateRecipes(search) {
     displayRecipes(filteredRecipes)
 }
 
-//overflow-y: auto
+const searchInput = document.querySelector('#general-search')
+
+let filteredList = false
+
+searchInput.addEventListener('input', () => {
+
+    if (searchInput.value.length >= 3) {
+        updateRecipes(searchInput.value.toLowerCase())
+        filteredList = true
+    } else if (filteredList) {
+        filteredList = false
+        updateRecipes(null)
+    }
+})

@@ -1,8 +1,9 @@
+import clearDOMContainer from "../utils/clear-DOM-container.js"
 import TagViewDataWrapper from "./TagViewDataWrapper.js"
 
 class FilterViewDataWrapper {
     #filter
-    #isOpen
+    #searchBarOpened
     #tagWrappers
 
     constructor(filter) {
@@ -11,6 +12,7 @@ class FilterViewDataWrapper {
         this.#tagWrappers = filter.tagList.map((tag) => {
             return new TagViewDataWrapper(tag)
         }).sort((a, b) => a.getName().localeCompare(b.getName()))
+        this.#searchBarOpened = false
     }
 
     setOnTagSelectedListener(onTagSelected) {
@@ -50,6 +52,7 @@ class FilterViewDataWrapper {
         tagsElements.forEach((elt) => {
             ul.appendChild(elt)
         })
+
         input.style.background = this.getColor()
         ul.style.background = this.getColor()
 
@@ -57,7 +60,33 @@ class FilterViewDataWrapper {
             this.displaySearchBar()
         })
 
+        input.addEventListener('input', () => {
+            if (input.value.length >= 1) {
+
+                let filteredWrapper = this.#tagWrappers.filter(wrapper => {
+                    return wrapper.getName().toLowerCase().includes(input.value.toLowerCase())
+                })
+
+                clearDOMContainer(ul)
+                filteredWrapper.forEach(wrapper => {
+                    ul.appendChild(wrapper.getUnselectedHTML())
+                })
+            } else {
+
+                this.resetTagList(ul)
+            }
+        })
+
         return this.$wrapper
+    }
+
+    resetTagList(container) {
+        clearDOMContainer(container)
+        let tagsElements = this.#tagWrappers.map((wrapper) => { return wrapper.getUnselectedHTML() })
+        console.log("tagsElements dans resetTagList: ", tagsElements)
+        tagsElements.forEach((elt) => {
+            container.appendChild(elt)
+        })
     }
 
     displaySearchBar() {
@@ -66,7 +95,7 @@ class FilterViewDataWrapper {
         const input = this.$wrapper.querySelector(`#search-bar-${this.#filter.type}`)
         ul.style.display = "none"
 
-        if (!this.#isOpen) {
+        if (!this.#searchBarOpened) {
             input.value = ''
             input.setAttribute(
                 'placeholder',
@@ -74,13 +103,15 @@ class FilterViewDataWrapper {
             )
             inputContainer.classList.add('arrow-up')
             ul.style.display = "block"
-            this.#isOpen = true
+            this.#searchBarOpened = true
         } else {
             input.value = this.#filter.title
             input.removeAttribute('placeholder')
             inputContainer.classList.remove('arrow-up')
             ul.style.display = "none"
-            this.#isOpen = false
+            this.#searchBarOpened = false
+
+            this.resetTagList(ul)
         }
     }
 
