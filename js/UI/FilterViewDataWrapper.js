@@ -10,7 +10,7 @@ class FilterViewDataWrapper {
         this.$wrapper = document.createElement('nav')
         this.#tagWrappers = filter.tagList.map((tag) => {
             return new TagViewDataWrapper(tag)
-        })
+        }).sort((a, b) => a.getName().localeCompare(b.getName()))
     }
 
     setOnTagSelectedListener(onTagSelected) {
@@ -36,16 +36,16 @@ class FilterViewDataWrapper {
 
         const searchBarTemplate = `
             <div class="measure-specific-search-container" >
-				<input id="search-bar-input" value="${this.#filter.title}" type="text" />
-					<ul id="tag-list">
+				<input id="search-bar-${this.#filter.type}" value="${this.#filter.title}" type="text" />
+					<ul id="tag-list-${this.#filter.type}">
 					</ul>
 			</div>
         `
 
         this.$wrapper.innerHTML = searchBarTemplate
 
-        const input = this.$wrapper.querySelector('#search-bar-input')
-        const ul = this.$wrapper.querySelector('#tag-list')
+        const input = this.$wrapper.querySelector(`#search-bar-${this.#filter.type}`)
+        const ul = this.$wrapper.querySelector(`#tag-list-${this.#filter.type}`)
 
         tagsElements.forEach((elt) => {
             ul.appendChild(elt)
@@ -61,9 +61,9 @@ class FilterViewDataWrapper {
     }
 
     displaySearchBar() {
-        const ul = this.$wrapper.querySelector('#tag-list')
+        const ul = this.$wrapper.querySelector(`#tag-list-${this.#filter.type}`)
         const inputContainer = this.$wrapper.querySelector(`.measure-specific-search-container`)
-        const input = this.$wrapper.querySelector('#search-bar-input')
+        const input = this.$wrapper.querySelector(`#search-bar-${this.#filter.type}`)
         ul.style.display = "none"
 
         if (!this.#isOpen) {

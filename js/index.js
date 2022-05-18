@@ -42,6 +42,7 @@ function displayRecipes(recipes) {
     displayFilters(recipes)
 }
 
+//appliquer une fonction pour chaque rubrique de displayFilters
 function displayFilters(recipes) {
     clearDOMContainer(filtersContainer)
 
@@ -138,18 +139,20 @@ searchInput.addEventListener('input', () => {
     }
 })
 
+//faire new branch boucles natives
 function updateRecipes(search) {
-    let filteredRecipes
-    if (search == null) {
-        filteredRecipes = recipes
-    } else {
+    let filteredRecipes = recipes
+
+    if (search != null) {
         filteredRecipes = recipes.filter(recipe => {
 
             let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
-            
+
             return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(search))
         })
     }
 
     displayRecipes(filteredRecipes)
 }
+
+//overflow-y: auto

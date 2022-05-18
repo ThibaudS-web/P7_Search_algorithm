@@ -205,8 +205,10 @@ ul {
 	color: white;
 	width: calc(100% - 15px);
 	padding: 0 15px 15px 15px;
-	column-gap: 2em;
-	column-count: 3;
+	/* column-gap: 2em; */
+	/* column-count: 3; */
+	overflow-y: auto;
+	max-height: 500px;
 }
 
 .arrow-up::after {
@@ -240,4 +242,56 @@ ul {
 .tag-selected {
 	text-decoration: line-through;
 	text-decoration-thickness: 2px;
+}
+
+/*Scrollbar styles*/
+#tag-list-ingredient::-webkit-scrollbar,
+#tag-list-appliance::-webkit-scrollbar,
+#tag-list-ustensils::-webkit-scrollbar {
+	width: 15px;
+}
+
+#tag-list-ingredient::-webkit-scrollbar-track,
+#tag-list-appliance::-webkit-scrollbar-track,
+#tag-list-ustensils::-webkit-scrollbar-track,
+#tag-list-ingredient::-webkit-scrollbar-thumb,
+#tag-list-appliance::-webkit-scrollbar-thumb,
+#tag-list-ustensils::-webkit-scrollbar-thumb {
+	border-radius: 2em;
+}
+
+#tag-list-ingredient::-webkit-scrollbar-track {
+	background: rgb(89, 155, 253);
+}
+
+#tag-list-ingredient::-webkit-scrollbar-thumb {
+	background: rgb(117, 172, 255);
+}
+
+#tag-list-ingredient::-webkit-scrollbar-thumb:hover {
+	background: rgb(132, 179, 250);
+}
+
+#tag-list-appliance::-webkit-scrollbar-track {
+	background: rgb(180, 208, 195);
+}
+
+#tag-list-appliance::-webkit-scrollbar-thumb {
+	background: rgb(158, 215, 188);
+}
+
+#tag-list-appliance::-webkit-scrollbar-thumb:hover {
+	background: rgb(187, 215, 202);
+}
+
+#tag-list-ustensils::-webkit-scrollbar-track {
+	background: rgb(238, 123, 111);
+}
+
+#tag-list-ustensils::-webkit-scrollbar-thumb {
+	background: rgb(233, 148, 138);
+}
+
+#tag-list-ustensils::-webkit-scrollbar-thumb:hover {
+	background: rgb(226, 169, 161);
 }
