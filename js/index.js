@@ -84,6 +84,7 @@ function displayFilters(recipes) {
     ingredientsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
         // Unselect ingredient tag
         removeTag(wrapper.getId())
+        console.log(wrapper.getId())
     })
     let appliancesFilterWrapper = new FilterViewDataWrapper(filterAppliances)
     appliancesFilterWrapper.setOnTagSelectedListener((wrapper) => {
@@ -118,7 +119,9 @@ function addNewTag(tagWrapper) {
 function removeTag(id) {
     let tagUI = selectedTags.get(id)
     tagsContainer.removeChild(tagUI)
+    console.log(selectedTags.get(id))
 }
+
 
 const searchInput = document.querySelector('#general-search')
 
@@ -143,7 +146,7 @@ function updateRecipes(search) {
         filteredRecipes = recipes.filter(recipe => {
 
             let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
-
+            
             return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(search))
         })
     }

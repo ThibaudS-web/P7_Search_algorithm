@@ -5,10 +5,10 @@ class TagViewDataWrapper {
     #selectedTagUI
     #selected
     #onTagSelected = (id) => {
-        console.log("Tu m'as oublié pogger, comment je fais pour sélectionner un tag :(")
+        console.log("onTagSelected not defined!")
     }
     #onTagUnselected = (id) => {
-        console.log("Tu m'as oublié pogger, comment je fais pour désélectionner un tag :(")
+        console.log("onTagUnselected not defined!")
     }
 
     constructor(tag) {
