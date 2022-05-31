@@ -12,8 +12,7 @@ import FilterViewDataWrapper from './UI/FilterViewDataWrapper.js'
 //All recipes from json file
 const recipes = dataBaseClient.getRecipes()
 
-let filteredRecipes
-let currentSearch
+let currentSearch = null
 
 let ingredientsNames
 let appliancesNames
@@ -27,7 +26,7 @@ const filtersContainer = document.querySelector('#specific-search-container')
 const tagsContainer = document.querySelector('#tag-container')
 const notFoundRecipe = document.querySelector('#notfound-recipe')
 //Contains the selected tags
-const selectedTags = new Map()
+const selectedTags = []
 
 ingredientsNames = [...
     new Set(recipes.flatMap(recipe => recipe.ingredients)
@@ -76,57 +75,40 @@ let ingredientsFilterWrapper = new FilterViewDataWrapper(filterIngredients)
 ingredientsFilterWrapper.setOnTagSelectedListener((wrapper) => {
     // Select ingredient tag
     addNewTag(wrapper)
-    updateRecipes(wrapper.getName().toLowerCase())
+    updateRecipes()
 })
 ingredientsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
     // Unselect ingredient tag
     removeTag(wrapper.getId())
-    updateRecipes(null)
-
-    Array.from(tagsContainer.children).forEach(child => {
-        console.log(child.querySelector('.tag-name').innerHTML)
-        updateRecipes(child.querySelector('.tag-name').innerHTML.toLowerCase())
-    })
+    updateRecipes()
 })
 
 let appliancesFilterWrapper = new FilterViewDataWrapper(filterAppliances)
 appliancesFilterWrapper.setOnTagSelectedListener((wrapper) => {
     // Select appliance tag
     addNewTag(wrapper)
-    updateRecipes(wrapper.getName().toLowerCase())
+    updateRecipes()
 })
 appliancesFilterWrapper.setOnTagUnselectedListener((wrapper) => {
     // Unselect appliance tag
     removeTag(wrapper.getId())
-    updateRecipes(null)
-
-    Array.from(tagsContainer.children).forEach(child => {
-        console.log(child.querySelector('.tag-name').innerHTML)
-        updateRecipes(child.querySelector('.tag-name').innerHTML.toLowerCase())
-    })
+    updateRecipes()
 })
 
 let ustensilsFilterWrapper = new FilterViewDataWrapper(filterUstensils)
 ustensilsFilterWrapper.setOnTagSelectedListener((wrapper) => {
     // Select ustensil tag
     addNewTag(wrapper)
-    updateRecipes(wrapper.getName().toLowerCase())
+    updateRecipes()
 })
 ustensilsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
     // Unselect ustensil tag
     removeTag(wrapper.getId())
-    updateRecipes(null)
-
-    //récupérer les tags (pas l'UI)
-
-    Array.from(tagsContainer.children).forEach(child => {
-        console.log(child.querySelector('.tag-name').innerHTML)
-        updateRecipes(child.querySelector('.tag-name').innerHTML.toLowerCase())
-    })
+    updateRecipes()
 })
 
 function init() {
-    updateRecipes(null)
+    updateRecipes()
 }
 
 init()
@@ -139,7 +121,7 @@ function displayRecipes(recipes) {
         recipesContainer.appendChild(cardRecipe.getHTML())
     })
 
-    if (recipesContainer.children.length === 0) {
+    if (recipes.length === 0) {
         notFoundRecipe.style.display = 'block'
     } else {
         notFoundRecipe.style.display = 'none'
@@ -181,68 +163,83 @@ function displayFilters(recipes) {
 function addNewTag(tagWrapper) {
     let tagUI = tagWrapper.getSelectedHTML()
     tagsContainer.appendChild(tagUI)
-    selectedTags.set(tagWrapper.getId(), tagUI)
+    selectedTags.push(tagWrapper)
 }
 
 function removeTag(id) {
-    let tagUI = selectedTags.get(id)
+    let tagUI = selectedTags.find(tagWrapper => tagWrapper.getId() === id).getSelectedHTML()
+    let indexRemovedTag = selectedTags.findIndex(tagWrapper => tagWrapper.getId() === id)
+    selectedTags.splice(indexRemovedTag, 1)
     tagsContainer.removeChild(tagUI)
-    if (tagsContainer.children.length === 0) {
-        updateRecipes(null)
-    }
 }
-
-
-//Create the new branch  for boucles natives algo
-
-function updateRecipes(search) {
-
-    if (search === null) {
-        filteredRecipes = recipes
-    }
-
-    if (tagsContainer.children.length > 1 && search != null) {
-
-        filteredRecipes = filteredRecipes.filter(recipe => {
-
-            let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
-
-            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(search))
-        })
-    }
-
-    if (tagsContainer.children.length <= 1 && search != null) {
-
-        filteredRecipes = recipes.filter(recipe => {
-
-            let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
-
-            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(search))
-        })
-    }
-
-    displayRecipes(filteredRecipes)
-}
-
-
-
-
 
 const searchInput = document.querySelector('#general-search')
 
-let filteredList = false
-
-searchInput.addEventListener('input', () => {
-
-    if (searchInput.value.length >= 3) {
-        updateRecipes(searchInput.value.toLowerCase())
-        filteredList = true
-    } else if (filteredList) {
-        filteredList = false
-        updateRecipes(null)
-    }
+searchInput.addEventListener('input', (event) => {
+    currentSearch = event.target.value
+    updateRecipes()
 })
 
+//Create the new branch  for boucles natives algo
+
+function searchByText(recipes) {
+    if (currentSearch == null) {
+        return recipes
+    }
+    if (currentSearch.length >= 3) {
+        return recipes.filter(recipe => {
+            let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
+
+            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(currentSearch))
+        })
+    } else {
+        return recipes
+    }
+}
+
+function searchByTag(recipes) {
+    return recipes.filter(recipe => {
+        let ingredientsName = recipe.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())
+        let ingredientsTagSelected = selectedTags.filter(wrapper => {
+            return wrapper.isIngredient()
+        }).map(wrapper => wrapper.getName().toLowerCase())
+
+        //si les tags selectionnés sont tous présents dans les ingrédients de la recette (every)
+        let ingredientsTagValid = ingredientsTagSelected.every(tag => {
+            return ingredientsName.includes(tag)
+        })
+
+        let appliancesTagSelected = selectedTags.filter(wrapper => {
+            return wrapper.isAppliance()
+        }).map(wrapper => wrapper.getName().toLowerCase())
+
+        let applianceTagValid = appliancesTagSelected.every(tagName => {
+            return recipe.appliance.toLowerCase() === tagName
+        })
+
+        let ustensilsTagSelected = selectedTags.filter(wrapper => {
+            return wrapper.isUstensil()
+        }).map(wrapper => wrapper.getName().toLowerCase())
+
+        let ustensilsTagValid = ustensilsTagSelected.every(tagName => {
+            return recipe.ustensils.map(ustensil => ustensil.toLowerCase()).includes(tagName)
+        })
+
+        return ingredientsTagValid && applianceTagValid && ustensilsTagValid
+    })
+}
+
+//1: Il faut les ingrédients de la recette contiennent au moins tout les tags ingrédients selectionnés
+//2: Il faut les appliances de la recette contiennent au moins tout les tags appliances selectionnés
+//3: Il faut les ustensils de la recette contiennent au moins tout les tags ustensils selectionnés
+//4: Il faut que chaque recette respecte tout les tags en même temps
+
+function updateRecipes() {
+    let resultByText = searchByText(recipes)
+    let resultByTag = searchByTag(resultByText)
+
+    displayRecipes(resultByTag)
+}
 
 //JAMAIS REGARDER l'UI
 

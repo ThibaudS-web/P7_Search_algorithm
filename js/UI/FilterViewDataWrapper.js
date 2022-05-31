@@ -12,6 +12,7 @@ class FilterViewDataWrapper {
         this.#tagWrappers = filter.tagList.map((tag) => {
             return new TagViewDataWrapper(tag)
         }).sort((a, b) => a.getName().localeCompare(b.getName()))
+        console.log(this.#tagWrappers)
         this.#searchBarOpened = false
         this.displayTags = this.#tagWrappers.map(wrapper => {
             return wrapper.getId()
@@ -71,7 +72,8 @@ class FilterViewDataWrapper {
             if (input.value.length >= 1) {
 
                 let filteredWrapper = this.#tagWrappers.filter(wrapper => {
-                    return wrapper.getName().toLowerCase().includes(input.value.toLowerCase())
+                    
+                    return wrapper.getName().toLowerCase().includes(input.value.toLowerCase()) && this.displayTags.includes(wrapper.getId())
                 })
 
                 clearDOMContainer(ul)

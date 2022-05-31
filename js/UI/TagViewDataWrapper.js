@@ -103,6 +103,18 @@ class TagViewDataWrapper {
         return this.#tag.id
     }
 
+    isIngredient() {
+        return this.#tag.type === 'ingredient'
+    }
+
+    isAppliance() {
+        return this.#tag.type === 'appliance'
+    }
+
+    isUstensil() {
+        return this.#tag.type === 'ustensils'
+    }
+
     selectTag() {
         this.#unselectedTagUI.classList.add("tag-selected")
         this.#selected = true
