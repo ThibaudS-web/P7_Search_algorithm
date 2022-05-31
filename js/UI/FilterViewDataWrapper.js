@@ -13,6 +13,9 @@ class FilterViewDataWrapper {
             return new TagViewDataWrapper(tag)
         }).sort((a, b) => a.getName().localeCompare(b.getName()))
         this.#searchBarOpened = false
+        this.displayTags = this.#tagWrappers.map(wrapper => {
+            return wrapper.getId()
+        })
     }
 
     setOnTagSelectedListener(onTagSelected) {
@@ -34,11 +37,15 @@ class FilterViewDataWrapper {
     }
 
     getHTML() {
-        let tagsElements = this.#tagWrappers.map((wrapper) => { return wrapper.getUnselectedHTML() })
+        let filteredTags = this.#tagWrappers.filter(wrapper => {
+            return this.displayTags.includes(wrapper.getId())
+        })
+
+        let tagsElements = filteredTags.map((wrapper) => { return wrapper.getUnselectedHTML() })
 
         const searchBarTemplate = `
             <div class="measure-specific-search-container" >
-				<input id="search-bar-${this.#filter.type}" value="${this.#filter.title}" type="text" />
+				<input id="search-bar-${this.#filter.type}" value="${this.#filter.title}" type="text" readonly/>
 					<ul id="tag-list-${this.#filter.type}">
 					</ul>
 			</div>
@@ -83,7 +90,6 @@ class FilterViewDataWrapper {
     resetTagList(container) {
         clearDOMContainer(container)
         let tagsElements = this.#tagWrappers.map((wrapper) => { return wrapper.getUnselectedHTML() })
-        console.log("tagsElements dans resetTagList: ", tagsElements)
         tagsElements.forEach((elt) => {
             container.appendChild(elt)
         })
@@ -96,23 +102,31 @@ class FilterViewDataWrapper {
         ul.style.display = "none"
 
         if (!this.#searchBarOpened) {
+
             input.value = ''
             input.setAttribute(
                 'placeholder',
                 `Rechercher un ${this.#filter.title.toLowerCase().substring(0, this.#filter.title.length - 1)}`
             )
+            input.removeAttribute('readonly')
             inputContainer.classList.add('arrow-up')
             ul.style.display = "block"
             this.#searchBarOpened = true
         } else {
+
             input.value = this.#filter.title
             input.removeAttribute('placeholder')
+            input.setAttribute('readonly', '')
             inputContainer.classList.remove('arrow-up')
             ul.style.display = "none"
             this.#searchBarOpened = false
 
-            this.resetTagList(ul)
+            // this.resetTagList(ul)
         }
+    }
+
+    restrictDisplayTags(tagListId) {
+        this.displayTags = tagListId
     }
 
     getColor() {

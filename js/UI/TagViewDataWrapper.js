@@ -34,7 +34,7 @@ class TagViewDataWrapper {
 
     buildSelectedUI() {
         const tagTemplate = `
-			<p>${this.getName()}</p>
+			<p class='tag-name'>${this.getName()}</p>
 			<svg id="unselect-icon"
 				class="close-tag"
 				width="20"
