@@ -159,8 +159,6 @@ searchInput.addEventListener('input', (event) => {
     updateRecipes()
 })
 
-//TODO : Create the new branch for boucles natives algo
-
 function searchByText(recipes) {
     if (currentSearch == null) {
         return recipes
