@@ -1,7 +1,7 @@
 import {
     dataBaseClient
 } from "./database/databaseClient.js"
-import CardViewDataWrapper from "./UI/CardViewDataWrapper.js"
+import RecipeViewDataWrapper from "./UI/RecipeViewDataWrapper.js"
 import Tag from './models/Tag.js'
 import textFormattingInFilter from "./utils/data-formatting.js"
 import clearDOMContainer from "./utils/clear-DOM-container.js"
@@ -14,10 +14,6 @@ const recipes = dataBaseClient.getRecipes()
 
 let currentSearch = null
 
-let ingredientsNames
-let appliancesNames
-let ustensilsNames
-
 //Contains the recipes
 const recipesContainer = document.querySelector('#recipe-card-container')
 //Contains the filters
@@ -28,84 +24,67 @@ const notFoundRecipe = document.querySelector('#notfound-recipe')
 //Contains the selected tags
 const selectedTags = []
 
-ingredientsNames = [...
-    new Set(recipes.flatMap(recipe => recipe.ingredients)
+function filter(callback, type, filterName) {
+    let tagId = 0;
+
+    const names = [
+        ...new Set(callback),
+    ];
+
+    const tags = names.map((name) => {
+        tagId++;
+        return new Tag(tagId, name, type);
+    });
+
+    const filter = new Filter(filterName, type, tags)
+
+    return [names, tags, filter];
+}
+
+function filterUI(filter) {
+    const filterWrapper = new FilterViewDataWrapper(filter)
+    filterWrapper.setOnTagSelectedListener((wrapper) => {
+        // Select ingredient tag
+        addNewTag(wrapper)
+        updateRecipes()
+    })
+
+    filterWrapper.setOnTagUnselectedListener((wrapper) => {
+        // Unselect ingredient tag
+        removeTag(wrapper.getId())
+        updateRecipes()
+    })
+
+    return filterWrapper
+}
+
+const [ingredientsNames, ingredientsTags, filterIngredients] = filter(
+    recipes.flatMap(recipe => recipe.ingredients)
         .filter((ingredient) => ingredient.ingredient.length > 0)
-        .map(ingredient => textFormattingInFilter(ingredient.ingredient)))
-]
+        .map(ingredient => textFormattingInFilter(ingredient.ingredient)),
+    'ingredient',
+    'Ingrédients'
+)
 
-appliancesNames = [...
-    new Set(recipes
-        .filter((recipe) => recipe.appliance.length > 0)
-        .map(recipe => textFormattingInFilter(recipe.appliance)))
-]
+const [appliancesNames, appliancesTags, filterAppliances] = filter(
+    recipes.filter((recipe) => recipe.appliance.length > 0)
+        .map(recipe => textFormattingInFilter(recipe.appliance)),
+    'appliance',
+    'Appareils'
+)
 
-ustensilsNames = [...
-    new Set(recipes.flatMap(recipe => recipe.ustensils)
+const [ustensilsNames, ustensilsTags, filterUstensils] = filter(
+    recipes.flatMap(recipe => recipe.ustensils)
         .filter((ustensil) => ustensil.length > 0)
-        .map(ustensil => textFormattingInFilter(ustensil)))
-]
+        .map(ustensil => textFormattingInFilter(ustensil)),
+    'ustensils',
+    'Ustensiles'
+)
 
-let tagId = 0
+let ingredientsFilterWrapper = filterUI(filterIngredients)
+let appliancesFilterWrapper = filterUI(filterAppliances)
+let ustensilsFilterWrapper = filterUI(filterUstensils)
 
-let ingredientsTags = ingredientsNames.map(item => {
-    tagId++
-    return new Tag(tagId, item, 'ingredient')
-})
-
-let appliancesTags = appliancesNames.map(item => {
-    tagId++
-    return new Tag(tagId, item, 'appliance')
-})
-
-let ustensilsTags = ustensilsNames.map(item => {
-    tagId++
-    return new Tag(tagId, item, 'ustensils')
-})
-
-
-//All possible tags displayed
-let filterIngredients = new Filter('Ingrédients', 'ingredient', ingredientsTags)
-
-let filterAppliances = new Filter('Appareils', 'appliance', appliancesTags)
-
-let filterUstensils = new Filter('Ustensiles', 'ustensils', ustensilsTags)
-
-let ingredientsFilterWrapper = new FilterViewDataWrapper(filterIngredients)
-ingredientsFilterWrapper.setOnTagSelectedListener((wrapper) => {
-    // Select ingredient tag
-    addNewTag(wrapper)
-    updateRecipes()
-})
-ingredientsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
-    // Unselect ingredient tag
-    removeTag(wrapper.getId())
-    updateRecipes()
-})
-
-let appliancesFilterWrapper = new FilterViewDataWrapper(filterAppliances)
-appliancesFilterWrapper.setOnTagSelectedListener((wrapper) => {
-    // Select appliance tag
-    addNewTag(wrapper)
-    updateRecipes()
-})
-appliancesFilterWrapper.setOnTagUnselectedListener((wrapper) => {
-    // Unselect appliance tag
-    removeTag(wrapper.getId())
-    updateRecipes()
-})
-
-let ustensilsFilterWrapper = new FilterViewDataWrapper(filterUstensils)
-ustensilsFilterWrapper.setOnTagSelectedListener((wrapper) => {
-    // Select ustensil tag
-    addNewTag(wrapper)
-    updateRecipes()
-})
-ustensilsFilterWrapper.setOnTagUnselectedListener((wrapper) => {
-    // Unselect ustensil tag
-    removeTag(wrapper.getId())
-    updateRecipes()
-})
 
 function init() {
     updateRecipes()
@@ -117,7 +96,7 @@ function displayRecipes(recipes) {
     clearDOMContainer(recipesContainer)
 
     recipes.forEach(recipe => {
-        const cardRecipe = new CardViewDataWrapper(recipe)
+        const cardRecipe = new RecipeViewDataWrapper(recipe)
         recipesContainer.appendChild(cardRecipe.getHTML())
     })
 
@@ -180,7 +159,7 @@ searchInput.addEventListener('input', (event) => {
     updateRecipes()
 })
 
-//Create the new branch  for boucles natives algo
+//TODO : Create the new branch for boucles natives algo
 
 function searchByText(recipes) {
     if (currentSearch == null) {
@@ -190,7 +169,7 @@ function searchByText(recipes) {
         return recipes.filter(recipe => {
             let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
 
-            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(currentSearch))
+            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(currentSearch.toLowerCase()))
         })
     } else {
         return recipes
@@ -229,22 +208,10 @@ function searchByTag(recipes) {
     })
 }
 
-//1: Il faut les ingrédients de la recette contiennent au moins tout les tags ingrédients selectionnés
-//2: Il faut les appliances de la recette contiennent au moins tout les tags appliances selectionnés
-//3: Il faut les ustensils de la recette contiennent au moins tout les tags ustensils selectionnés
-//4: Il faut que chaque recette respecte tout les tags en même temps
-
 function updateRecipes() {
     let resultByText = searchByText(recipes)
     let resultByTag = searchByTag(resultByText)
 
     displayRecipes(resultByTag)
 }
-
-//JAMAIS REGARDER l'UI
-
-//Regarder les tags isSelected pour forEach dans updateRecipes
-
-
-//Prendre toutes les recettes qui ont le tag sélectionné
 

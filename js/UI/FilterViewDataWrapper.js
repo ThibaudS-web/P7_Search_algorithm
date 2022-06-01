@@ -12,7 +12,6 @@ class FilterViewDataWrapper {
         this.#tagWrappers = filter.tagList.map((tag) => {
             return new TagViewDataWrapper(tag)
         }).sort((a, b) => a.getName().localeCompare(b.getName()))
-        console.log(this.#tagWrappers)
         this.#searchBarOpened = false
         this.displayTags = this.#tagWrappers.map(wrapper => {
             return wrapper.getId()

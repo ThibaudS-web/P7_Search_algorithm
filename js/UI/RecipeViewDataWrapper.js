@@ -1,6 +1,6 @@
 import IngredientViewDataWrapper from "./IngredientViewDataWrapper.js"
-//RecipeViewDataWrapper
-class CardViewDataWrapper {
+
+class RecipeViewDataWrapper {
     
     constructor(recipe) {
         this.recipe = recipe
@@ -40,4 +40,4 @@ class CardViewDataWrapper {
     }
 }
 
-export default CardViewDataWrapper
+export default RecipeViewDataWrapper
