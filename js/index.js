@@ -164,11 +164,28 @@ function searchByText(recipes) {
         return recipes
     }
     if (currentSearch.length >= 3) {
-        return recipes.filter(recipe => {
-            let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
+        let filteredRecipe = []
 
-            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(currentSearch.toLowerCase()))
-        })
+        for (let i = 0; i < recipes.length; i++) {
+            let name = recipes[i].name.toLowerCase()
+            let description = recipes[i].description.toLowerCase()
+            let ingredients = []
+            let filteredValues = []
+            for (let j = 0; j < recipes[i].ingredients.length; j++) {
+                ingredients.push(recipes[i].ingredients[j].ingredient.toLowerCase())
+            }
+
+            filteredValues = [name, description].concat(ingredients)
+
+            for (let value of filteredValues) {
+                if (value.includes(currentSearch.toLowerCase())) {
+                    filteredRecipe.push(recipes[i])
+                }
+            }
+        }
+
+        return filteredRecipe
+
     } else {
         return recipes
     }
