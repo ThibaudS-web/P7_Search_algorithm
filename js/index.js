@@ -145,7 +145,6 @@ function displayFilters(recipes) {
         let filteredValues = recipes.map(recipe => recipe.appliance)
         return filteredValues.some(appliance => appliance.toLowerCase() === tag.name.toLowerCase())
     })
-    console.log(appliancesFiltered)
 
     let ingredientsFiltered = ingredientsTags.filter(tag => {
         let filteredValues = recipes.flatMap(recipe => recipe.ingredients)
@@ -203,7 +202,7 @@ searchInput.addEventListener('input', (event) => {
 })
 
 /**
- * If the current search is null, we return all the recipes. 
+ * If the current search is null or less to 3 caracters, we return all the recipes. 
    If the size of the current search is greater than or equal to 3, we catch the values we want, the name of the recipe, its description and its ingredients. 
    Once all the values of all recipes have been entered, filter based on the current search.
    A new table of filtered recipes is returned.
@@ -228,15 +227,15 @@ function searchByText(recipes) {
             }
 
             filteredValues = [name, description].concat(ingredients)
+            console.log(filteredValues)
 
-            for (let value of filteredValues) {
+            for (let value of filteredValues) { 
                 if (value.includes(currentSearch.toLowerCase())) {
                     filteredRecipe.push(recipes[i])
                 }
             }
         }
-       
-        console.log(filteredRecipe)
+        
         return filteredRecipe
 
     } else {
@@ -244,6 +243,11 @@ function searchByText(recipes) {
     }
 }
 
+/**
+ * 
+ * @param {*} recipes 
+ * @returns 
+ */
 function searchByTag(recipes) {
     return recipes.filter(recipe => {
         let ingredientsName = recipe.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())
@@ -255,6 +259,7 @@ function searchByTag(recipes) {
         let ingredientsTagValid = ingredientsTagSelected.every(tag => {
             return ingredientsName.includes(tag)
         })
+        console.log(ingredientsTagValid)
 
         let appliancesTagSelected = selectedTags.filter(wrapper => {
             return wrapper.isAppliance()
@@ -282,6 +287,6 @@ function updateRecipes() {
     let resultByText = searchByText(recipes)
     let resultByTag = searchByTag(resultByText)
 
-    displayRecipes(resultByTag)
+    displayRecipes([...new Set(resultByTag)])
 }
 
