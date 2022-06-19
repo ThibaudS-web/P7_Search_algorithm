@@ -211,7 +211,7 @@ searchInput.addEventListener('input', (event) => {
  */
 function searchByText(recipes) {
     if (currentSearch == null) {
-        console.log(recipes)
+      
         return recipes
     }
     if (currentSearch.length >= 3) {
@@ -227,7 +227,6 @@ function searchByText(recipes) {
             }
 
             filteredValues = [name, description].concat(ingredients)
-            console.log(filteredValues)
 
             for (let value of filteredValues) { 
                 if (value.includes(currentSearch.toLowerCase())) {
@@ -244,7 +243,8 @@ function searchByText(recipes) {
 }
 
 /**
- * 
+ * A function that takes an array of recipes, modified by search bar or not, in parameter. 
+ * This function filters recipes according to the selected tags
  * @param {*} recipes 
  * @returns 
  */
@@ -259,7 +259,6 @@ function searchByTag(recipes) {
         let ingredientsTagValid = ingredientsTagSelected.every(tag => {
             return ingredientsName.includes(tag)
         })
-        console.log(ingredientsTagValid)
 
         let appliancesTagSelected = selectedTags.filter(wrapper => {
             return wrapper.isAppliance()
@@ -281,7 +280,10 @@ function searchByTag(recipes) {
     })
 }
 /**
- * 
+ * This function sets the new recipes to display.
+ * First, it calls the searchByText() function, which is used to sort recipes with the search bar.
+ * Next, it calls the searchByTag() function to refine the search with the selected tags.
+ * Finally, it calls the displayRecipes() function to request the display of previously filtered recipes.
  */
 function updateRecipes() {
     let resultByText = searchByText(recipes)
