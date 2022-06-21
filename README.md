@@ -2,7 +2,7 @@
 
 ## Presentation 
 
-For this project, a research algorithm is being implemented. The user has the possibility to filter recipes from the kitchen with a search bar and 3 differents filters (Filter by ingredients, appliances, and utensils).
+For this project, a research algorithm is being implemented. The user has the possibility to filter recipes from the kitchen with a search bar and 3 differents filters (Filter by ingredients, appliances, and utensils). I use the MVC architecture.
 
 ## Project constraint
 
