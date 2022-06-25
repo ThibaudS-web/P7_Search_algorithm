@@ -4,5 +4,9 @@ function textFormattingInFilter(text) {
     return capitalize
 }
 
+export function normalizeAccent(text) {
+    return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
+
 export default textFormattingInFilter
 

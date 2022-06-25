@@ -3,11 +3,10 @@ import {
 } from "./database/databaseClient.js"
 import RecipeViewDataWrapper from "./UI/RecipeViewDataWrapper.js"
 import Tag from './models/Tag.js'
-import textFormattingInFilter from "./utils/data-formatting.js"
+import textFormattingInFilter, { normalizeAccent } from "./utils/data-formatting.js"
 import clearDOMContainer from "./utils/clear-DOM-container.js"
 import Filter from "./models/Filter.js"
 import FilterViewDataWrapper from './UI/FilterViewDataWrapper.js'
-
 
 //All recipes from json file
 const recipes = dataBaseClient.getRecipes()
@@ -227,9 +226,10 @@ function searchByText(recipes) {
             }
 
             filteredValues = [name, description].concat(ingredients)
-
+            console.log()
+            
             for (let value of filteredValues) { 
-                if (value.includes(currentSearch.toLowerCase())) {
+                if (normalizeAccent(value).includes(normalizeAccent(currentSearch).toLowerCase())) {
                     filteredRecipe.push(recipes[i])
                 }
             }
@@ -249,6 +249,7 @@ function searchByText(recipes) {
  * @returns 
  */
 function searchByTag(recipes) {
+    
     return recipes.filter(recipe => {
         let ingredientsName = recipe.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())
         let ingredientsTagSelected = selectedTags.filter(wrapper => {
@@ -275,9 +276,10 @@ function searchByTag(recipes) {
         let ustensilsTagValid = ustensilsTagSelected.every(tagName => {
             return recipe.ustensils.map(ustensil => ustensil.toLowerCase()).includes(tagName)
         })
-
+       
         return ingredientsTagValid && applianceTagValid && ustensilsTagValid
     })
+
 }
 /**
  * This function sets the new recipes to display.

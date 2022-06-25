@@ -1,4 +1,5 @@
 class Filter {
+    
     constructor(title, type, tagList) {
         this.type = type
         this.title = title
