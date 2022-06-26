@@ -3,7 +3,7 @@ import {
 } from "./database/databaseClient.js"
 import RecipeViewDataWrapper from "./UI/RecipeViewDataWrapper.js"
 import Tag from './models/Tag.js'
-import textFormattingInFilter from "./utils/data-formatting.js"
+import textFormattingInFilter, { normalizeAccent } from "./utils/data-formatting.js"
 import clearDOMContainer from "./utils/clear-DOM-container.js"
 import Filter from "./models/Filter.js"
 import FilterViewDataWrapper from './UI/FilterViewDataWrapper.js'
@@ -221,7 +221,7 @@ function searchByText(recipes) {
         return recipes.filter(recipe => {
             let filteredValues = [recipe.name, recipe.description].concat(recipe.ingredients.map(ingredient => ingredient.ingredient))
 
-            return filteredValues.map(property => property.toLowerCase()).some(property => property.includes(currentSearch.toLowerCase()))
+            return filteredValues.map(property => property.toLowerCase()).some(property => normalizeAccent(property).includes(normalizeAccent(currentSearch).toLowerCase()))
         })
     } else {
         return recipes
